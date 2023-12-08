@@ -1,0 +1,24 @@
+<script>
+    function downloadFile(filePath) {
+        // Use JavaScript or jQuery to initiate the file download
+        var link = document.createElement('a');
+        link.href = filePath;
+        link.download = '';  // You can set a specific filename here if needed
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+ @(Html.Kendo().Grid<ModelName>()
+    // other grid configurations
+    .Name("gridName")
+    .Columns(columns =>
+    {
+        // other columns
+
+        columns.Bound(m => m.FilePath).Title("File").Width(150)
+            .ClientTemplate("<i class='fa fa-file download-icon' onclick='downloadFile(#= FilePath #)'></i> #= FileName #");
+        
+        // other columns
+    })
+)
