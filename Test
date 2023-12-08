@@ -11,3 +11,19 @@
         // other columns
     })
 )
+@(Html.Kendo().Grid<ModelName>()
+    .Name("gridName")
+    .Columns(columns =>
+    {
+        // other columns
+
+        columns.Bound(m => m.Status).Title("Status").Width(150)
+            .ClientTemplate("# if (Status === 'Active') { #" +
+                            "   <span class='active-status'>Active</span>" +
+                            "# } else { #" +
+                            "   <span class='inactive-status'>Inactive</span>" +
+                            "# } #");
+
+        // other columns
+    })
+)
