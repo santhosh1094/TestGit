@@ -6,13 +6,7 @@
         // other columns
 
         columns.Bound(m => m.FilePath).Title("File").Width(150)
-            .ClientTemplate(
-                "# if (FilePath) { #" +
-                "   <i class='fa fa-file download-icon' onclick='downloadFile(#= FilePath #)'></i> #= FileName #" +
-                "# } else { #" +
-                "   No File" +
-                "# }"
-            );
+            .ClientTemplate("#= (FilePath && FilePath.trim() !== '') ? '<i class=\"fa fa-file download-icon\" onclick=\"downloadFile(' + FilePath + ')\"></i> ' + FileName : 'No File' #");
         
         // other columns
     })
