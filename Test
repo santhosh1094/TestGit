@@ -1,29 +1,56 @@
-@(Html.Kendo().Grid<ModelName>()
-    // other grid configurations
-    .Name("gridName")
-    .Columns(columns =>
+public class FileController : ApiController
+{
+    public HttpResponseMessage GetFile()
     {
-        // other columns
+        // Your logic to get the file bytes or stream
+        byte[] fileBytes = GetFileBytes(); 
 
-        columns.Bound(m => m.FilePath).Title("File").Width(150)
-            .ClientTemplate("#= (FilePath && FilePath.trim() !== '') ? '<i class=\"fa fa-file download-icon\" onclick=\"downloadFile(' + FilePath + ')\"></i> ' + FileName : 'No File' #");
-        
-        // other columns
-    })
-)
-@(Html.Kendo().Grid<ModelName>()
-    .Name("gridName")
-    .Columns(columns =>
+        HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new ByteArrayContent(fileBytes)
+        };
+
+        response.Content.Headers.ContentDisposition =
+            new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+            {
+                FileName = "example.txt" // Change the file name accordingly
+            };
+
+        response.Content.Headers.ContentType =
+            new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+
+        return response;
+    }
+
+    private byte[] GetFileBytes()
     {
-        // other columns
+        // Your logic to retrieve file bytes
+        // Replace this with your actual logic
+        string filePath = "C:\\Path\\To\\Your\\File.txt";
+        return File.ReadAllBytes(filePath);
+    }
+}
 
-        columns.Bound(m => m.Status).Title("Status").Width(150)
-            .ClientTemplate("# if (Status === 'Active') { #" +
-                            "   <span class='active-status'>Active</span>" +
-                            "# } else { #" +
-                            "   <span class='inactive-status'>Inactive</span>" +
-                            "# } #");
+public class HomeController : Controller
+{
+    public ActionResult DownloadFile()
+    {
+        using (HttpClient client = new HttpClient())
+        {
+            HttpResponseMessage response = client.GetAsync("https://your-api-url/api/file").Result;
 
-        // other columns
-    })
-)
+            if (response.IsSuccessStatusCode)
+            {
+                var fileBytes = response.Content.ReadAsByteArrayAsync().Result;
+                var fileName = "example.txt"; // Change the file name accordingly
+
+                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+            }
+            else
+            {
+                // Handle error accordingly
+                return View("Error");
+            }
+        }
+    }
+}
