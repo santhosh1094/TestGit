@@ -1,3 +1,23 @@
+public ActionResult DownloadFile()
+{
+    // Replace "yourFilePath" with the actual path to your file
+    string filePath = "yourFilePath";
+
+    if (System.IO.File.Exists(filePath))
+    {
+        byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+        
+        // Extract the filename from the path
+        string fileName = System.IO.Path.GetFileName(filePath);
+
+        return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+    }
+    else
+    {
+        // Handle the case when the file doesn't exist
+        return HttpNotFound("File not found");
+    }
+}
 public class FileController : ApiController
 {
     public HttpResponseMessage GetFile()
