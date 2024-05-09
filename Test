@@ -1,1 +1,55 @@
-I have fixed the program type sorting issue in the invoice screen. However, during testing, I observed a global issue across all screens. Sorting only works once for each column. For example, clicking on a column sorts it in ascending/descending order the first time. Clicking the same column a second time doesn't trigger the expected reverse sorting.
+using System;
+using System.Reflection;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Original entity model
+        EntityModel originalModel = new EntityModel { Value = 10 };
+
+        // Create a deep copy of the original model
+        EntityModel copiedModel = DeepCopy(originalModel);
+
+        // Make changes to the original model
+        originalModel.Value = 20;
+
+        // Display the values to see the changes
+        Console.WriteLine("Original Model Value: " + originalModel.Value);
+        Console.WriteLine("Copied Model Value: " + copiedModel.Value);
+    }
+
+    // Generic method for deep copying objects
+    public static T DeepCopy<T>(T source)
+    {
+        if (source == null)
+            throw new ArgumentNullException(nameof(source));
+
+        Type type = source.GetType();
+        if (!type.IsSerializable)
+            throw new ArgumentException("The type must be serializable.");
+
+        // Create an instance of the object
+        T copiedObject = (T)Activator.CreateInstance(type);
+
+        // Get all properties of the type
+        PropertyInfo[] properties = type.GetProperties();
+
+        // Copy property values
+        foreach (PropertyInfo property in properties)
+        {
+            if (property.CanRead && property.CanWrite)
+            {
+                object value = property.GetValue(source);
+                property.SetValue(copiedObject, value);
+            }
+        }
+
+        return copiedObject;
+    }
+}
+
+class EntityModel
+{
+    public int Value { get; set; }
+}
