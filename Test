@@ -1,55 +1,20 @@
-using System;
-using System.Reflection;
+Monday 
 
-class Program
-{
-    static void Main(string[] args)
-    {
-        // Original entity model
-        EntityModel originalModel = new EntityModel { Value = 10 };
+I have implemented a masking feature for the SSN and phone number input fields on the user interface using jQuery. This masking ensures that the sensitive information is displayed in a user-friendly format while being typed. Additionally, I have configured the application to pass the unmasked values to the controller within the ViewModel, ensuring that the data is processed correctly on the backend
 
-        // Create a deep copy of the original model
-        EntityModel copiedModel = DeepCopy(originalModel);
+Tuesday
 
-        // Make changes to the original model
-        originalModel.Value = 20;
+I have worked on implementing Fluent Validation to validate the dynamic controls created under the beneficiary and dependent sections. This includes adding mandatory validation to these dynamic controls, performing model state validation, and displaying error messages accordingly. Additionally, I have integrated a reindex function to reindex the span error controls within each row.
 
-        // Display the values to see the changes
-        Console.WriteLine("Original Model Value: " + originalModel.Value);
-        Console.WriteLine("Copied Model Value: " + copiedModel.Value);
-    }
+Wednesday
 
-    // Generic method for deep copying objects
-    public static T DeepCopy<T>(T source)
-    {
-        if (source == null)
-            throw new ArgumentNullException(nameof(source));
+I have moved the controller, business logic, and view for the LODDD claim process from the Internal Area to the Authorized Area. Additionally, I have ensured that the dropdown values are retained during the post action method.
 
-        Type type = source.GetType();
-        if (!type.IsSerializable)
-            throw new ArgumentException("The type must be serializable.");
+Thursday
 
-        // Create an instance of the object
-        T copiedObject = (T)Activator.CreateInstance(type);
+I have analyzed the tables created by Robert and identified the fields that are available in the UI but not present in the database tables, and vice versa, for both the Fire Fighter Information and Dependent Detail tables. Additionally, I have clarified the discrepancies between the UI and the database tables with Robert.
 
-        // Get all properties of the type
-        PropertyInfo[] properties = type.GetProperties();
+Friday 
 
-        // Copy property values
-        foreach (PropertyInfo property in properties)
-        {
-            if (property.CanRead && property.CanWrite)
-            {
-                object value = property.GetValue(source);
-                property.SetValue(copiedObject, value);
-            }
-        }
+As discussed with Robert, I have made the necessary changes to the LODDD tables to include the missing fields. I have also added the migration commands in EF Core to apply these changes. Additionally, I have changed the data type of the fields for checkboxes to 'bit'. 
 
-        return copiedObject;
-    }
-}
-
-class EntityModel
-{
-    public int Value { get; set; }
-}
